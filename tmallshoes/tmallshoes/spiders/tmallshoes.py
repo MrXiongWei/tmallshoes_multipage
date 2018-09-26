@@ -40,36 +40,6 @@ class TmallshoesSpider(scrapy.Spider):
         self.browser.get(response.url)
         time.sleep(5)
 
-        '''
-        # 模拟登陆
-        login_frame = self.wait.until(
-            lambda browser: browser.find_element_by_id('J_loginIframe')
-        )
-
-        self.browser.switch_to_frame('J_loginIframe')
-
-        to_login = self.wait.until(
-            lambda browser: browser.find_element_by_id('J_Quick2Static')
-        )
-        to_login.click()
-
-        username = self.wait.until(
-            lambda browser: browser.find_element_by_id('TPL_username_1')
-        )
-        username.clear()
-        username.send_keys('xwzjying')
-
-        password = self.wait.until(
-            lambda browser: browser.find_element_by_id('TPL_password_1')
-        )
-        password.clear()
-        password.send_keys('201310Xiongwei')
-        time.sleep(20)
-        login = self.wait.until(
-            lambda browser: browser.find_element_by_id('J_SubmitStatic')
-        )
-        login.click()
-        '''
         # 输入查询和排序条件，加载第一页
         input = self.wait.until(
             lambda browser: browser.find_element_by_xpath('//*[@id="mq"]')
