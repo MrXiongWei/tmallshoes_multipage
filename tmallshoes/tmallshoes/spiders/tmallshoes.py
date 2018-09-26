@@ -138,28 +138,38 @@ class TmallshoesSpider(scrapy.Spider):
             product = TmallshoesItem()
             title = site.xpath(
                 './p[@class="productTitle"]/a/@title').extract()
-            # product['title'] = [t for t in title]
+            product['title'] = [t for t in title]
+            '''
             for t in title:
                 product['title'] = t
+            '''
             link = site.xpath(
                 './div[@class="productImg-wrap"]/a/@href').extract()
-            # product['link'] = [l for l in link]
+            product['link'] = ['https:' + l for l in link]
+            '''
             for l in link:
                 product['link'] = 'https:' + l
+            '''
             price = site.xpath(
                 './p[@class="productPrice"]/em/text()').extract()
-            # product['price'] = [p for p in price]
+            product['price'] = [p for p in price]
+            '''
             for p in price:
                 product['price'] = p
+            '''
             deal = site.xpath(
                 './p[@class="productStatus"]/span/em/text()').extract()
-            # product['deal'] = [d for d in deal]
+            product['deal'] = [d[:-1] for d in deal]
+            '''
             for d in deal:
                 product['deal'] = d[:-1]
+            '''
             shop = site.xpath(
                 './div[@class="productShop"]/a/text()').extract()
-            # product['shop'] = [s.replace('\n', '') for s in shop]
+            product['shop'] = [s.replace('\n', '') for s in shop]
+            '''
             for s in shop:
                 product['shop'] = s.replace('\n', '')
+            '''
             products.append(product)
         return products
