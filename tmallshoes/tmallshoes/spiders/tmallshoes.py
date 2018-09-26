@@ -27,6 +27,13 @@ class TmallshoesSpider(scrapy.Spider):
         self.browser = webdriver.Chrome(executable_path=settings.executable_path, chrome_options=option)
         # self.browser.set_page_load_timeout(10)
         self.wait = WebDriverWait(self.browser, settings.wait_time)
+        dispatcher.connect(self.spider_closed,
+                           signals.spider_closed)  # 第二个参数是信号（spider_closed:爬虫关闭信号，信号量有很多）,第一个参数是当执行第二个参数信号时候要执行的方法
+
+    def spider_closed(self, spider):
+        # 当爬虫退出的时候关闭chrome
+        print('spider closed')
+        self.browser.quit()
 
     def parse(self, response):
         url_set = set()
