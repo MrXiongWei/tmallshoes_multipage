@@ -158,7 +158,7 @@ class TmallshoesSpider(scrapy.Spider):
                 product['deal'] = d[:-1]
             shop = site.xpath(
                 './div[@class="productShop"]/a/text()').extract()
-            # product['shop'] = [p for p in shop]
+            # product['shop'] = [s.replace('\n', '') for s in shop]
             for s in shop:
                 product['shop'] = s.replace('\n', '')
             products.append(product)
