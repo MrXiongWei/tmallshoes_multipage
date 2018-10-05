@@ -25,6 +25,7 @@ class TmallshoesSpider(scrapy.Spider):
         option.add_argument(settings.option_gpu)
         option.add_argument(settings.USER_AGENT)
         self.browser = webdriver.Chrome(executable_path=settings.executable_path, chrome_options=option)
+        self.browser.maximize_window()
         # self.browser.set_page_load_timeout(10)
         self.wait = WebDriverWait(self.browser, settings.wait_time)
         dispatcher.connect(self.spider_closed,
@@ -42,30 +43,30 @@ class TmallshoesSpider(scrapy.Spider):
 
         # 输入查询和排序条件，加载第一页
         input = self.wait.until(
-            lambda browser: browser.find_element_by_xpath('//*[@id="mq"]')
+            lambda browser: self.browser.find_element_by_xpath('//*[@id="mq"]')
         )
         input.send_keys(settings.KEY_WORDS)
         submit = self.wait.until(
-            lambda browser: browser.find_element_by_xpath('//*[@id="mallSearch"]/form/fieldset/div/button')
+            lambda browser: self.browser.find_element_by_xpath('//*[@id="mallSearch"]/form/fieldset/div/button')
         )
         submit.click()
         input_price = self.wait.until(
-            lambda browser: browser.find_element_by_xpath('//*[@id="J_FPrice"]/div[1]/b[1]/input')
+            lambda browser: self.browser.find_element_by_xpath('//*[@id="J_FPrice"]/div[1]/b[1]/input')
         )
         input_price.clear()
         input_price.send_keys(settings.KEY_PRICE)
         submit_price = self.wait.until(
-            lambda browser: browser.find_element_by_xpath('//*[@id="J_FPEnter"]')
+            lambda browser: self.browser.find_element_by_xpath('//*[@id="J_FPEnter"]')
         )
         submit_price.click()
 
         sort = self.wait.until(
-            lambda browser: browser.find_element_by_xpath('//*[@id="J_Filter"]/a[4]')
+            lambda browser: self.browser.find_element_by_xpath('//*[@id="J_Filter"]/a[4]')
         )
         sort.click()
         # 获取总的页数
         total = self.wait.until(
-            lambda browser: browser.find_element_by_xpath(
+            lambda browser: self.browser.find_element_by_xpath(
                 '//*[@id="content"]/div/div[@class="ui-page"]/div/b[@class="ui-page-skip"]/form')
         )
         total = int(re.compile('(\d+)').search(total.text).group(1))
@@ -76,18 +77,18 @@ class TmallshoesSpider(scrapy.Spider):
         # 点击下一页或者输入页面跳转到指定页面，获取页面URL
         for i in range(2, total + 1):
             next_input = self.wait.until(
-                lambda browser: browser.find_element_by_xpath(
+                lambda browser: self.browser.find_element_by_xpath(
                     '//*[@id="content"]/div/div[@class="ui-page"]/div/b[@class="ui-page-skip"]/form/input[@name="jumpto"]')
             )
             next_input.clear()
             next_input.send_keys(i)
             next_submit = self.wait.until(
-                lambda browser: browser.find_element_by_xpath(
+                lambda browser: self.browser.find_element_by_xpath(
                     '//*[@id="content"]/div/div[@class="ui-page"]/div/b[@class="ui-page-skip"]/form/button')
             )
             '''
             next_submit = self.wait.until(
-                lambda browser: browser.find_element_by_xpath(
+                lambda browser: self.browser.find_element_by_xpath(
                     '//*[@id="content"]/div/div[@class="ui-page"]/div/b[@class="ui-page-num"]/a[@class="ui-page-next"]')
             )
           '''
